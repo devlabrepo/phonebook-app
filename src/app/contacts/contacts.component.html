@@ -1,0 +1,79 @@
+<div class="container">
+
+   <div class="row">
+      <div class="col-sm-12">
+         <form [formGroup]="contactForm" (ngSubmit)="addContact()">
+            <div class="form-group forms">
+
+               <input type="text" formControlName="name" id="name" placeholder="name">
+            </div>
+            <div class="form-group forms">
+
+               <input type="text" formControlName="surname" id="surname" placeholder="surname">
+            </div>
+            <div class="form-group forms">
+
+               <input type="text" formControlName="address" id="address" placeholder="address">
+            </div>
+            <div class="form-group forms">
+
+               <input list="cat" type="search" placeholder="category" id="category" formControlName="category">
+
+               <datalist id="cat">
+                  <option *ngFor="let cat of categories">{{cat.title}}</option>
+               </datalist>
+            </div>
+
+            <div class="form-group forms">
+               <input type="tel" formControlName="number" id="number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" required
+                  placeholder="phone number">
+            </div>
+            <div class="form-group forms">
+               <input type="number" formControlName="ranking" id="ranking" min="1" max="10" size="2">
+            </div>
+            <div class="form-group forms">
+               <input type="text" formControlName="tags" id="tags" placeholder="tags">
+            </div>
+            <div class="form-group forms">
+               <button type="submit" class="btn btn-success btn-sm" style="width: 40px">+</button>
+            </div>
+
+
+         </form>
+      </div>
+   </div>
+
+
+   <div class="row">
+
+      <div class="col-xs-12">
+         <table class="table table-striped table-inverse table-responsive">
+            <thead class="thead-inverse">
+               <tr>
+                  <th>name</th>
+                  <th>surname</th>
+                  <th>address</th>
+                  <th>category</th>
+                  <th>phone</th>
+                  <th>ranking</th>
+                  <th>tags</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let contact of contacts">
+                  <td>{{contact.name}}</td>
+                  <td>{{contact.surname}}</td>
+                  <td>{{contact.address}}</td>
+                  <td>{{contact.category}}</td>
+                  <td>{{contact.phone}}</td>
+                  <td>{{contact.ranking}}</td>
+                  <td>
+                     <span class="badge badge-info" style="margin: 2px;" *ngFor="let tag of contact.tags">{{tag}}</span>
+                  </td>
+               </tr>
+
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
