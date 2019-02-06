@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   config: {
-    host: "http//localhost:8080"
+    host: "http://89.67.215.18:11780/phonebook/api/dto"
   }
 };
 

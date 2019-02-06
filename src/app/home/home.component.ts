@@ -9,10 +9,21 @@ import { MainService } from '../main.service';
 export class HomeComponent implements OnInit {
 
   counter: number;
+
+  text = {
+    line1: "",
+    line2: ""
+  };
+
   constructor(private mainService: MainService) { }
 
   ngOnInit() {
-    this.mainService.getCounter().subscribe(d => { this.counter = d });
+    //  this.mainService.getCounter().subscribe(d => { this.counter = d });
+  }
+
+  show(event) {
+    console.log(this.text);
+    console.log(event);
   }
 
 }

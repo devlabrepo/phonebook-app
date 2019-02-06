@@ -4,6 +4,7 @@ import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/htt
 import { Contact } from '../objects/contact';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Category } from '../objects/category';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -19,12 +20,12 @@ export class ContactsComponent implements OnInit, OnDestroy {
   contactForm: FormGroup;
 
   constructor(
-    private mainService: MainService, private http: HttpClient) {
+    private mainService: MainService, private http: HttpClient, private spinner: NgxSpinnerService) {
     this.contactForm = this.createForm();
   }
 
   ngOnInit(): void {
-  //  this.mainService.incrementCounter();
+    //  this.mainService.incrementCounter();
     //  this.getContacts();
     // this.getContactsResponse();
     this.getContactsObs();
@@ -35,17 +36,16 @@ export class ContactsComponent implements OnInit, OnDestroy {
     console.log("ContactsComponent: onDestroy");
   }
 
-
   getContacts() {
     this.contacts = [];
-    return this.http.get<Array<Contact>>("http://89.67.215.18:11780/phonebook/api/dto/contacts")
+    this.mainService.getContacts()
       .subscribe(
         //success
         result => { result.map(r => this.contacts.push(r)); },
         //errors
         err => { },
         //complete
-        () => { console.log(this.contacts) })
+        () => { })
   }
 
   getContactsObs() {
@@ -75,37 +75,71 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
 
   public getCategories() {
+    this.spinner.show();
     this.categories = [];
     this.mainService.getCategories()
-    .subscribe(result => { result
-      .map( c => this.categories.push(c))});
+      .subscribe(result => {
+        result
+          .map(c => this.categories.push(c))
+      }, err => {}, () => {this.spinner.hide()});
   }
 
 
   addContact() {
-   
-      let contact: Contact = {
-        name: this.contactForm.value.name,
-        surname: this.contactForm.value.surname,
-        number: this.contactForm.value.number,
-        address: this.contactForm.value.address,
-        category: this.contactForm.value.category,
-        ranking: this.contactForm.value.ranking,
-        tags: []
-      }
 
-     this.mainService
-     .addContact(contact)
-     .subscribe(
-      data => { },
-     
-      (err: HttpErrorResponse) => { console.log(err) },
-     
-      () => { 
-        this.contactForm.reset();
-        this.getContactsObs();
-       })
-    
+    let contact: Contact = {
+      name: this.contactForm.value.name,
+      surname: this.contactForm.value.surname,
+      number: this.contactForm.value.number,
+      address: this.contactForm.value.address,
+      category: this.contactForm.value.category,
+      ranking: this.contactForm.value.ranking,
+      tags: this.prepareTags(this.contactForm.value.tags)
+    }
+
+    this.mainService.postContact(contact)
+      .subscribe(
+        data => { },
+
+        (err: HttpErrorResponse) => { console.log(err) },
+
+        () => {
+          this.addTags(contact.number, contact.tags)
+        })
+  }
+
+  prepareTags(tagString: string) {
+    return tagString.split(",")
+  }
+
+  addTags(phone: string, tags: string[]) {
+    this.mainService.postTags(phone, tags)
+      .subscribe(
+        data => { },
+        (err: HttpErrorResponse) => { console.log(err) },
+        () => {
+          this.contactForm.reset();
+          this.trigger();
+          this.getContacts();
+        });
+  }
+
+  flag: boolean;
+  updateContactAddress(phone: string, address: string) {
+    this.mainService.putContactAddress(phone, address)
+      .subscribe(s => { }, e => { }, () => { this.getContacts(); this.trigger() })
+  }
+
+  trigger() {
+    if (this.flag) {
+      this.flag = false;
+    } else {
+      this.flag = true;
+    }
+  }
+
+  delete(phone: string) {   
+    this.mainService.deleteContact(phone).subscribe(s => { }, e => { }, () => { this.getContacts() })
   }
 
   createForm(): FormGroup {
@@ -119,5 +153,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
       tags: new FormControl(),
     })
   }
+
+
 
 }

@@ -6,8 +6,6 @@ export class Contact {
     address: string
     category: string
     ranking: number
-    tags: []
-
-
+    tags: string[]
 }
 
