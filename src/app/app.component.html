@@ -1,14 +1,12 @@
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }} {{counter}}!
-  </h1>
+<app-navbar></app-navbar>
 
-  <button type="button" class="btn btn-success btn-sm button" routerLink="/home">home</button>
-  <button type="button" class="btn btn-primary btn-sm button" routerLink="/contacts" >contacts</button>
-</div>
+
+<div class="container-fluid">
+
   <router-outlet></router-outlet>
 
-  <ngx-spinner bdColor="rgb(255, 255, 255,1)" size="large" color="#80bfff" type="ball-scale-multiple">
-      <p style="font-size: 1em; color: rgb(99, 99, 99); text-align: center">loading...</p>
-    </ngx-spinner>
+</div>
 
+<ngx-spinner bdColor="rgb(255, 255, 255,1)" size="large" color="#80bfff" type="ball-scale-multiple">
+  <p style="font-size: 1em; color: rgb(99, 99, 99); text-align: center">loading...</p>
+</ngx-spinner>

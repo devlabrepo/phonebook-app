@@ -11,11 +11,27 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { NavbarComponent } from './navbar/navbar.component';
+import { LoginComponent } from './login/login.component';
+
+const config = {
+  apiKey: "AIzaSyAVDRplTYtEnbhSic154CezUkIS2pOFXoQ",
+  authDomain: "phonebook-1d172.firebaseapp.com",
+  databaseURL: "https://phonebook-1d172.firebaseio.com",
+  projectId: "phonebook-1d172",
+  storageBucket: "phonebook-1d172.appspot.com",
+  messagingSenderId: "635811077861"
+};
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    ContactsComponent
+    ContactsComponent,
+    NavbarComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +40,10 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
     FormsModule,
     ReactiveFormsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    AngularFireModule.initializeApp(config),
+    AngularFireAuthModule,
+
 
   ],
   providers: [MainService],
